@@ -7,9 +7,14 @@
 
 int main()
 {
-    fftw_complex in[N], out[N], ref[N];
+    fftw_complex *in, *out, *ref;
     fftw_plan fft, ifft;
     int i;
+
+    /* allocate memory */
+    in = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N);
+    out = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N);
+    ref = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N);
 
     /* prepare a cosine wave */
     for(int i = 0; i < N; i++)
@@ -47,7 +52,11 @@ int main()
     }
     fftw_destroy_plan(ifft);
 
+    /* deallocate memory and plan */
     fftw_cleanup();
+    fftw_free(in);
+    fftw_free(out);
+    fftw_free(ref);
 
     return 0;
 }
